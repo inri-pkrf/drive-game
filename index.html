@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><title>מתניעים אחריות</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;800&family=Karantina:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div id="stage" dir="rtl">
+<img id="logo" src="assets/logo.png" alt="לוגו המכללה">
+<div id="codebar"><h3 class="h">קוד נצבר</h3><div id="digs"></div></div>
+<div id="glow"></div><div id="enter"></div>
+<div class="scr on" id="s-name">
+ <div class="glass pop" style="left:60px;right:60px;top:300px;height:700px">
+  <h1 class="h">מתניעים אחריות</h1><h2 style="color:#8fd0ff;margin-top:10px">שבוע הבטיחות בדרכים</h2>
+  <p>הקלידו את שמכם כדי להצטרף לאתגר</p>
+  <input id="nm" maxlength="20" inputmode="none" autocomplete="off" aria-label="שם" placeholder="השם שלכם"></div>
+ <div id="kb"></div>
+ <div style="position:absolute;left:60px;right:60px;top:1700px"><button class="btn g" id="go" disabled>מתחילים</button></div>
+</div>
+<div class="scr" id="s-intro"><div class="glass pop" style="left:70px;right:70px;top:420px"><h2 id="it">הנהג שכח את הקוד!</h2><p style="font-size:50px">הנהג שכח את הקוד! עזרו לו להתניע. כדי לפצח את קוד המכונית, עלינו לענות על שאלות בטיחות בדרכים...</p><button class="btn" id="go2" style="margin-top:30px">יאללה, מפצחים את הקוד!</button></div></div>
+<div class="scr" id="s-q"><div class="glass pop" id="qbox" style="left:50px;right:50px;top:300px">
+ <div id="qh"><h2 id="qt"></h2><span id="qn"></span></div><p id="qs" style="text-align:right;font-size:46px"></p><div id="opts"></div><div id="fb"></div><button class="btn g" id="nx" style="display:none">המשך</button></div></div>
+<div class="scr" id="s-pad"><div class="glass pop" style="left:60px;right:60px;top:270px;padding:36px 44px"><p style="font-size:44px;margin:0 0 10px">כל הכבוד! אספתם את כל הספרות. עכשיו הגיע הזמן להתניע.</p><h2 class="h">מפצחים את קוד המכונית</h2><p id="pm" style="font-size:40px;min-height:56px;margin:8px 0 0"></p></div>
+ <div id="pad"><div id="rub"><div id="ent"><span id="led"></span></div><div class="keyrow" id="pks"></div></div>
+ <div id="acts"><button class="btn" id="del" style="background:linear-gradient(#e66,#a22);box-shadow:0 8px 0 #600">מחיקה</button><button class="btn g" id="okb">אישור</button></div></div></div>
+<div class="scr" id="s-end"><div class="glass pop" style="left:60px;right:60px;top:290px">
+ <h1 class="h" style="font-size:130px;color:#27e07a">הצלחתם להתניע!</h1><p>נהיגה בטוחה מתחילה בהחלטות נכונות.</p>
+ <p id="res" style="font-size:48px;font-weight:800"></p>
+ <table><thead><tr><th>דירוג</th><th>שם</th><th>זמן</th></tr></thead><tbody id="lb"></tbody></table><p id="lbn" style="font-size:30px;opacity:.75;margin:8px 0"></p>
+ <button class="btn" id="again" style="margin-top:10px">משחק חדש</button></div></div>
+<button id="mute" aria-label="השתקה">🔊</button>
+</div>
+<script src="js/questions.js"></script>
+<script src="js/game.js"></script>
+</body></html>
