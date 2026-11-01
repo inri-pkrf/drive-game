@@ -44,11 +44,12 @@ $('okb').onclick=function(){if(G.busy)return;if(G.ent.length<4){$('pm').textCont
 // results
 function fmt(ms){var s=Math.round(ms/1000);return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
 var dbc=null,useApi=false,LOC=[];try{LOC=JSON.parse(localStorage.getItem('sc')||'[]')}catch(e){}
+try{if(window.firebase){firebase.initializeApp({apiKey:"AIzaSyCfj2Wrf4E-FXcSGEwWLn_GWxwM4-xqvxM",authDomain:"drive-game-45108.firebaseapp.com",projectId:"drive-game-45108",storageBucket:"drive-game-45108.firebasestorage.app",messagingSenderId:"58047927605",appId:"1:58047927605:web:34b5444acc8fc8fe06287c"});dbc=firebase.firestore().collection('scores')}}catch(e){dbc=null}
 (function(){try{if(window.claude)claude.use('db').then(function(d){if(d)dbc=d.collection('scores')}).catch(function(){})}catch(e){}
 try{fetch('api/scores').then(function(r){useApi=r.ok}).catch(function(){})}catch(e){}})();
 function finish(){G.busy=false;$('res').innerHTML=G.name+' · זמן: <span class="num">'+fmt(G.ms)+'</span> · טעויות: '+G.miss;show('s-end');$('lb').innerHTML='';
  var rec={name:G.name,ms:G.ms,miss:G.miss,ts:Date.now()};if(!saved){saved=true;save(rec)}else load()}
-function save(rec){if(dbc)dbc.add(rec).then(load).catch(function(){save2(rec)});else save2(rec)}
+function save(rec){if(dbc){var done=false,t=setTimeout(function(){if(!done){done=true;local(rec)}},5000);dbc.add(rec).then(function(){if(!done){done=true;clearTimeout(t);load()}}).catch(function(){if(!done){done=true;clearTimeout(t);save2(rec)}})}else save2(rec)}
 function save2(rec){if(useApi)fetch('api/scores',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)}).then(function(r){if(!r.ok)throw 0;load()}).catch(function(){local(rec)});else local(rec)}
 function local(r){LOC.push(r);try{localStorage.setItem('sc',JSON.stringify(LOC))}catch(e){}draw(LOC.slice(),false)}
 function load(){if(dbc)dbc.orderBy('ms','asc').limit(10).get().then(function(s){draw(s.docs.map(function(d){return d.data()}),true)}).catch(function(){draw(LOC.slice(),false)});else if(useApi)fetch('api/scores').then(function(r){return r.json()}).then(function(a){draw(a,true)}).catch(function(){draw(LOC.slice(),false)});else draw(LOC.slice(),false)}
