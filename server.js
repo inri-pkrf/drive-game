@@ -1,7 +1,7 @@
 // שרת קטן ללא תלויות: מגיש את המשחק ושומר דירוג משותף בקובץ scores.json
 const http=require('http'),fs=require('fs'),path=require('path');
 const PORT=process.env.PORT||3000,ROOT=__dirname,DB=path.join(ROOT,'data','scores.json');
-const T={'.html':'text/html;charset=utf-8','.css':'text/css;charset=utf-8','.js':'text/javascript;charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.woff2':'font/woff2'};
+const T={'.html':'text/html;charset=utf-8','.css':'text/css;charset=utf-8','.js':'text/javascript;charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.woff2':'font/woff2','.mp4':'video/mp4'};
 fs.mkdirSync(path.dirname(DB),{recursive:true});
 const read=()=>{try{return JSON.parse(fs.readFileSync(DB,'utf8'))}catch(e){return[]}};
 http.createServer((q,s)=>{
@@ -18,5 +18,12 @@ http.createServer((q,s)=>{
   s.statusCode=405;return s.end('{}')}
  let f;try{f=path.join(ROOT,decodeURIComponent(u.pathname==='/'?'/index.html':u.pathname))}catch(e){s.statusCode=400;return s.end()}
  if(!f.startsWith(ROOT)||f.startsWith(path.join(ROOT,'data'))||f.endsWith('server.js')){s.statusCode=403;return s.end()}
- fs.readFile(f,(e,d)=>{if(e){s.statusCode=404;return s.end('404')}s.setHeader('Content-Type',T[path.extname(f)]||'application/octet-stream');s.end(d)})
+ fs.stat(f,(e,st)=>{if(e||!st.isFile()){s.statusCode=404;return s.end('404')}
+  s.setHeader('Content-Type',T[path.extname(f)]||'application/octet-stream');s.setHeader('Accept-Ranges','bytes');
+  let a=0,z=st.size-1,m=/^bytes=(\d*)-(\d*)$/.exec(q.headers.range||'');
+  if(m&&(m[1]||m[2])){if(m[1]){a=+m[1];if(m[2])z=Math.min(z,+m[2])}else{a=Math.max(0,st.size-+m[2])}
+   if(a>z||a>=st.size){s.statusCode=416;s.setHeader('Content-Range','bytes */'+st.size);return s.end()}
+   s.statusCode=206;s.setHeader('Content-Range','bytes '+a+'-'+z+'/'+st.size)}
+  s.setHeader('Content-Length',z-a+1);
+  fs.createReadStream(f,{start:a,end:z}).on('error',()=>s.destroy()).pipe(s)})
 }).listen(PORT,()=>console.log('המשחק פועל בכתובת http://localhost:'+PORT));
